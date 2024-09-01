@@ -1,0 +1,17 @@
+.form{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.button{
+    height: 40px;
+}
+i{
+    cursor: pointer;
+}
+.buttonCitaMedica{
+    width: 130px;
+}
+.dropdown-gender{
+    width: 10px
+}
