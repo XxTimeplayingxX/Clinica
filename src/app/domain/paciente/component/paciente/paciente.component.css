@@ -15,3 +15,11 @@ i{
 .dropdown-gender{
     width: 10px
 }
+.doctor-logo{
+    font-size: 30px;
+}
+.doctor-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

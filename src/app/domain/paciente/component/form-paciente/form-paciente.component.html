@@ -1,29 +1,12 @@
-<div class="navBar">
-  <form class="form">
-    <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon1"
-        ><i class="fa-solid fa-magnifying-glass"></i
-      ></span>
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Username"
-        aria-label="Username"
-        aria-describedby="basic-addon1"
-      />
-    </div>
-    <button
-      type="button"
-      class="btn btn-primary button"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal"
-    >
-      Agregar
-    </button>
-  </form>
-</div>
+<!-- <button
+  type="button"
+  class="btn btn-primary button"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal"
+>
+  Agregar
+</button>
 
-<!-- Modal -->
 <div
   class="modal fade"
   id="exampleModal"
@@ -162,87 +145,4 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="table-responsive">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Cédula</th>
-        <th scope="col">Teléfono</th>
-        <th scope="col">Correo</th>
-        <th scope="col">Género</th>
-        <th scope="col">Historial</th>
-        <th scope="col">Cita Médica</th>
-        <th scope="col">Editar</th>
-        <th scope="col">Eliminar</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (item of pacientes; track $index) {
-      <tr>
-        <td>{{ $index + 1 }}</td>
-        <td>{{ item.nombre }}</td>
-        <td>{{ item.apellido }}</td>
-        <td>{{ item.cedula }}</td>
-        <td>{{ item.telefono }}</td>
-        <td>{{ item.correo }}</td>
-        <td>{{ item.genero }}</td>
-        <td>{{ item.historialMedico }}</td>
-        <td>
-          <button class="btn btn-primary buttonCitaMedica" data-bs-toggle="modal" data-bs-target="#doctorModal">Cita Médica</button>
-        </td>
-        <div class="modal fade" id="doctorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">ELIGA AL DOCTOR</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              @for (doctores of doctor; track $index) {
-                <div class="modal-body container">
-                  <div class="container content-container text-center">
-                    <div class="row doctor-content">
-                      <div class="col">
-                        <i class="fa-solid fa-user-doctor doctor-logo"></i>
-                      </div>
-                      <div class="col">
-                        <h5>{{doctores.nombre}} {{doctores.apellido}}</h5>
-                        <p>{{doctores.especialidad}}</p>
-                      </div>
-                      <div class="col">
-                        <button class="btn btn-primary h-50 w-50">Elegir</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              }
-              
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <td>
-          <i
-            class="fa-solid fa-pencil"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
-            (click)="EditarPaciente(item)"
-          ></i>
-        </td>
-
-        <td>
-          <i class="fa-solid fa-trash" (click)="EliminarPaciente($index)"></i>
-        </td>
-      </tr>
-
-      }
-    </tbody>
-  </table>
-</div>
+</div> -->
