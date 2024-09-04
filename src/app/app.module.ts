@@ -8,9 +8,7 @@ import { ListAtencionComponent } from './domain/atencion/pages/list-atencion/lis
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AtencionComponent,
-    ListAtencionComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,

@@ -11,6 +11,15 @@ const routes: Routes = [
         loadChildren:()=>import('./domain/paciente/paciente.module').then(p=>p.PacienteModule)
       }
     ]
+  },
+  {
+    path: '',
+    children:[
+      {
+        path: 'lista-paciente',
+        loadChildren:()=>import('./domain/atencion/atencion.module').then(l=>l.AtencionModule)
+      }
+    ]
   }
 ];
 
