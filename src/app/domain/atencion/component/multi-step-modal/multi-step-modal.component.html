@@ -1,71 +1,130 @@
-
-  <div class="container">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<div class="container">
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+  >
     Atender
-    </button>
-  </div>
-    
+  </button>
+</div>
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 " id="exampleModalLabel">Receta</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Receta</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form [formGroup]="form" class="form" (ngSubmit)="GuradarCambios()">
         <div class="modal-body">
-          <form action="" class="form">
-            <div class="input-group mb-3">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">
+              <i class="fa-solid fa-pills"></i>
+            </span>
+            <input
+              type="text"
+              formControlName="medicamento"
+              class="form-control"
+              placeholder="Medicamento"
+              aria-label="Medicamento"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+          <div class="row">
+            <div class="input-group mb-3 col">
               <span class="input-group-text" id="basic-addon1">
-                <i class="fa-solid fa-pills"></i>
+                <i class="fa-solid fa-capsules"></i>
               </span>
-              <input type="text" class="form-control" placeholder="Medicamento" aria-label="Medicamento" aria-describedby="basic-addon1">
+              <input
+                type="text"
+                formControlName="dosis"
+                class="form-control"
+                placeholder="Dosis"
+                aria-label="Dosis"
+                aria-describedby="basic-addon1"
+              />
             </div>
-            <div class="row">
-              <div class="input-group mb-3 col">
+            <div class="input-group mb-3 col">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fa-regular fa-calendar"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="frecuencia"
+                placeholder="Frecuencia en horas"
+                aria-label="Frecuencia en horas"
+                aria-describedby="basic-addon1"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h5>Fecha de Inico</h5>
+              <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">
-                  <i class="fa-solid fa-capsules"></i>
+                  <i class="fa-solid fa-calendar-check"></i>
                 </span>
-                <input type="text" class="form-control" placeholder="Dosis" aria-label="Dosis" aria-describedby="basic-addon1">
-              </div>
-              <div class="input-group mb-3 col">
-                <span class="input-group-text" id="basic-addon1">
-                  <i class="fa-regular fa-calendar"></i>
-                </span>
-                <input type="text" class="form-control" placeholder="Frecuencia en horas" aria-label="Frecuencia en horas" aria-describedby="basic-addon1">
+                <input
+                  type="date"
+                  formControlName="fechaInicio"
+                  class="form-control"
+                  placeholder="Fecha de Inicio"
+                  aria-label="Fecha de Inicio"
+                  aria-describedby="basic-addon1"
+                />
               </div>
             </div>
-            <div class="row">
-              <div class="col">
-                <h5>Fecha de Inico</h5>
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1">
-                    <i class="fa-solid fa-calendar-check"></i>
-                  </span>
-                  <input type="date" class="form-control" placeholder="Fecha de Inicio" aria-label="Fecha de Inicio" aria-describedby="basic-addon1">
-                </div>
-              </div>
-              <div class="input-group mb-3 col">
-                <span class="input-group-text" id="basic-addon1">
-                  <i class="fa-solid fa-clock"></i>
-                </span>
-                <input type="text" class="form-control" placeholder="Duracion en días" aria-label="Duracion en días" aria-describedby="basic-addon1">
-              </div>
+            <div class="input-group mb-3 col">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fa-solid fa-clock"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="duracion"
+                placeholder="Duracion en días"
+                aria-label="Duracion en días"
+                aria-describedby="basic-addon1"
+              />
             </div>
-            <div class="input-group mb-3 col form-group">
-                <span class="input-group-text" id="basic-addon1">
-                  <i class="fa-solid fa-scroll"></i>
-                </span>
-                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Ingrese las instrucciones"></textarea>
-              </div>
-                
-          </form>
+          </div>
+          <div class="input-group mb-3 col form-group">
+            <span class="input-group-text" id="basic-addon1">
+              <i class="fa-solid fa-scroll"></i>
+            </span>
+            <textarea
+              class="form-control"
+              formControlName="instrucciones"
+              id="exampleFormControlTextarea1"
+              rows="3"
+              placeholder="Ingrese las instrucciones"
+            ></textarea>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
-      </div>
+      </form>
     </div>
-  </div>  
- 
+  </div>
+</div>
