@@ -14,9 +14,234 @@
         <td>{{ $index + 1 }}</td>
         <td>{{ item.cedula }}</td>
         <td>{{ item.nombre }} {{ item.apellido }}</td>
-        <td><app-multi-step-modal/></td>
+        <td><div class="container">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            (click)="ObtenerObjeto($index)"
+          >
+            Atender
+          </button>
+        </div></td>
       </tr>
-      }
+      }     
     </tbody>
   </table>
+</div>
+
+<div
+class="modal fade"
+id="exampleModal"
+tabindex="-1"
+aria-labelledby="exampleModalLabel"
+data-bs-backdrop="static"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="exampleModalLabel">
+        {{ accion }} Receta
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <form [formGroup]="form" class="form" (ngSubmit)="GuardarCambios()">
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">
+            <i class="fa-solid fa-pills"></i>
+          </span>
+          <input
+            type="text"
+            formControlName="medicamento"
+            class="form-control"
+            placeholder="Medicamento"
+            aria-label="Medicamento"
+            aria-describedby="basic-addon1"
+          />
+        </div>
+        <div class="row">
+          <div class="input-group mb-3 col">
+            <span class="input-group-text" id="basic-addon1">
+              <i class="fa-solid fa-capsules"></i>
+            </span>
+            <input
+              type="text"
+              formControlName="dosis"
+              class="form-control"
+              placeholder="Dosis"
+              aria-label="Dosis"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+          <div class="input-group mb-3 col">
+            <span class="input-group-text" id="basic-addon1">
+              <i class="fa-regular fa-calendar"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="frecuencia"
+              placeholder="Frecuencia en horas"
+              aria-label="Frecuencia en horas"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h5>Fecha de Inico</h5>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fa-solid fa-calendar-check"></i>
+              </span>
+              <input
+                type="date"
+                formControlName="fechaInicio"
+                class="form-control"
+                placeholder="Fecha de Inicio"
+                aria-label="Fecha de Inicio"
+                aria-describedby="basic-addon1"
+              />
+            </div>
+          </div>
+          <div class="input-group mb-3 col">
+            <span class="input-group-text" id="basic-addon1">
+              <i class="fa-solid fa-clock"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="duracion"
+              placeholder="Duracion en días"
+              aria-label="Duracion en días"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+        </div>
+        <div class="input-group mb-3 col form-group">
+          <span class="input-group-text" id="basic-addon1">
+            <i class="fa-solid fa-scroll"></i>
+          </span>
+          <textarea
+            class="form-control"
+            formControlName="instrucciones"
+            id="exampleFormControlTextarea1"
+            rows="3"
+            placeholder="Ingrese las instrucciones"
+          ></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        @if (detalleReceta != null && detalleReceta.length > 0) {
+        <button
+          class="btn btn-primary"
+          data-bs-target="#exampleModalToggle2"
+          data-bs-toggle="modal"
+          type="button"
+        >
+          Ver cambios
+        </button>
+        }
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+
+<div
+class="modal fade modal-dialog-scrollable"
+id="exampleModalToggle2"
+aria-hidden="true"
+data-bs-backdrop="static"
+aria-labelledby="exampleModalToggleLabel2"
+tabindex="-1"
+>
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">
+        Receta a tomar
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      @if (!(detalleReceta != null && detalleReceta.length > 0)) {
+      <div class="text-center">
+        <h3>No hay recetas registradas</h3>
+      </div>
+      } @else { @for (item of detalleReceta; track $index) {
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <p><strong>Medicamento: </strong>{{ item.medicamento }}</p>
+            <p><strong>Dosis: </strong> {{ item.dosis }}</p>
+            <p>
+              <strong>Frecuencia: </strong> Cada {{ item.frecuencia }} horas
+            </p>
+            <P><strong>Fecha de incio: </strong> {{ item.fechaInicio }}</P>
+            <p><strong>Duración:</strong> {{ item.duracion }} días</p>
+            <p><strong>Nombre:</strong> {{item.nombre}}</p>
+            <p><strong>Teléfono:</strong> {{item.telefono}}</p>
+          </div>
+          <div class="col">
+            <textarea name="" id="" cols="30" rows="10">{{
+              item.instrucciones
+            }}</textarea>
+          </div>
+        </div>
+      </div>
+      <div class="container option-container gap-2">
+        <div
+          class="btn btn-primary"
+          data-bs-target="#exampleModal"
+          data-bs-toggle="modal"
+          (click)="EditarTarjeta(item, $index)"
+        >
+          Editar
+        </div>
+        <div class="btn btn-danger" (click)="EliminarDetalle($index)">
+          Eliminar
+        </div>
+      </div>
+      <hr />
+      } }
+    </div>
+    <div class="modal-footer">
+      <button
+        class="btn btn-primary"
+        data-bs-target="#exampleModal"
+        data-bs-toggle="modal"
+        (click)="CambiarNombre()"
+      >
+        Agregar receta
+      </button>
+      @if ((detalleReceta != null && detalleReceta.length > 0)) {
+      <button class="btn btn-success" (click)="EnviarCambios(detalleReceta)">
+        Enviar Cambios
+      </button>
+      }
+    </div>
+  </div>
+</div>
 </div>
