@@ -164,16 +164,13 @@ export class AtencionComponent {
   }
 
   horasDespierto = [6, 12, 20];
-  notificacione: any = [];
+  horasDespiertoDosVeces = [6, 20];
+  notificacione: any = []
 
   EnviarCambios(detalleReceta: any) {
     console.log("Inicio del método");
     console.log(detalleReceta);
-    console.log(detalleReceta.length);
-    const MILLISECONDS_PER_HOUR = 3600000;
-
-    // const fechaInicio = new Date(detalleReceta.fechaInicio);
-    // console.log("Fecha de Inicio: "+fechaInicio);
+    console.log(detalleReceta.length);    
     
     for(let i = 0; i < detalleReceta.length; i++){
       console.log("Estamos en el elemento "+i+" del arreglo");
@@ -182,9 +179,15 @@ export class AtencionComponent {
       let notificacionesPorDia = Math.floor(24/detalleReceta[i].frecuencia);
       console.log("Notificaciones por día: "+notificacionesPorDia);
       for(let dia = 0; dia < detalleReceta[i].duracion; dia++){
+        console.log("Estamos en el día: "+dia)
         console.log("La duración del tratamiento es de: "+detalleReceta[i].duracion+" días");
         for(let n = 0; n< notificacionesPorDia; n++){
-          let horaNotificacion = this.horasDespierto[n % this.horasDespierto.length];
+          let horaNotificacion: any;
+          if(notificacionesPorDia == 3){
+            horaNotificacion = this.horasDespierto[n % this.horasDespierto.length];
+          }else{
+            horaNotificacion = this.horasDespiertoDosVeces[n % this.horasDespiertoDosVeces.length];
+          }
           console.log("Hora Notificación es: "+horaNotificacion);
           console.log("Fecha de Inicio: "+detalleReceta[i].fechaInicio);
           console.log(typeof(detalleReceta[i].fechaInicio));
@@ -208,56 +211,5 @@ export class AtencionComponent {
       }
     }
     console.log(this.notificacione.length);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // for (let i = 0; i < detalleReceta.length; i++) {
-    //   const FechaInico = new Date(detalleReceta[i].fechaInicio);
-
-    //   console.log(detalleReceta[i].fechaInicio);
-
-    //   console.log(FechaInico);
-
-    //   let cantidadDeRegistros =
-    //     (24 / this.detalleReceta[i].frecuencia) *
-    //     this.detalleReceta[i].duracion;
-
-    //   console.log(cantidadDeRegistros);
-    //   for (let n = 0; n < cantidadDeRegistros; n++) {
-    //     const fechaDosis = new Date(FechaInico.getTime()+(i*detalleReceta[i].frecuencia*MILLISECONDS_PER_HOUR));
-        
-    //     console.log(fechaDosis);
-
-    //     const nuevaNotificacion: any={
-    //       IdDetalleReceta: detalleReceta[i].id,
-    //       FechaDosis: fechaDosis,
-    //       Enviado: false,
-    //       fechaEnviado: null,
-    //       mensaje: "Hola "+detalleReceta[i].nombre + ", es hora de tomar: "+detalleReceta[i].medicamento
-    //     }
-
-    //     console.log(nuevaNotificacion);
-    //   }
-    // }
-
-    // console.log("Primera prueba");
-    // console.log(detalleReceta);
-    // this.pacientes[this.pacienteSeleccionado.pacienteID - 1].activo = false;
-    // console.log(this.pacientes[this.pacienteSeleccionado.pacienteID]);
   }
 }
