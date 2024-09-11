@@ -195,39 +195,7 @@
         <td>
           <button class="btn btn-primary buttonCitaMedica" data-bs-toggle="modal" data-bs-target="#doctorModal">Cita Médica</button>
         </td>
-        <div class="modal fade" id="doctorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">ELIGA AL DOCTOR</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              @for (doctores of doctor; track $index) {
-                <div class="modal-body container">
-                  <div class="container content-container text-center">
-                    <div class="row doctor-content">
-                      <div class="col">
-                        <i class="fa-solid fa-user-doctor doctor-logo"></i>
-                      </div>
-                      <div class="col">
-                        <h5>{{doctores.nombre}} {{doctores.apellido}}</h5>
-                        <p>{{doctores.especialidad}}</p>
-                      </div>
-                      <div class="col">
-                        <button class="btn btn-primary h-50 w-50">Elegir</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              }
-              
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        
         <td>
           <i
             class="fa-solid fa-pencil"
@@ -245,4 +213,37 @@
       }
     </tbody>
   </table>
+  <div class="modal fade" id="doctorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">ELIGA AL DOCTOR</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        @for (doctores of doctor; track $index) {
+          <div class="modal-body container">
+            <div class="container content-container text-center">
+              <div class="row doctor-content">
+                <div class="col">
+                  <i class="fa-solid fa-user-doctor doctor-logo"></i>
+                </div>
+                <div class="col">
+                  <h5>{{doctores.nombre}} {{doctores.apellido}}</h5>
+                  <p>{{doctores.especialidad}}</p>
+                </div>
+                <div class="col">
+                  <button class="btn btn-primary h-50 w-50">Elegir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
