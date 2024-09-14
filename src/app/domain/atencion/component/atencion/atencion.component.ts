@@ -202,6 +202,7 @@ export class AtencionComponent {
             FechaDosis: fechaDosis,
             Enviado: false,
             fechaEnviado: null,
+            telefono: detalleReceta[i].telefono, 
             mensaje: "Hola "+detalleReceta[i].nombre + ", es hora de tomar: "+detalleReceta[i].medicamento
           }
 

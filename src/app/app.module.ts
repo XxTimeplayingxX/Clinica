@@ -3,8 +3,7 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AtencionComponent } from './domain/atencion/component/atencion/atencion.component';
-import { ListAtencionComponent } from './domain/atencion/pages/list-atencion/list-atencion.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -12,7 +11,8 @@ import { ListAtencionComponent } from './domain/atencion/pages/list-atencion/lis
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [
     provideClientHydration()
