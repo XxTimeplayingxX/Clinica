@@ -9,6 +9,7 @@ import {
 import { ClinicaService } from '../../../services/clinica.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { Doctor } from '../../../MODELS/doctor.model';
+import { CitaMedicaService } from '../../../services/cita-medica.service';
 
 @Component({
   selector: 'app-paciente',
@@ -24,7 +25,8 @@ export class PacienteComponent implements OnInit {
   constructor(private fb: FormBuilder, 
     private fbuilder: FormBuilder, 
     private pacienteService:ClinicaService,
-    private doctorService:DoctorService) {
+    private doctorService:DoctorService, 
+    private citaMedicaService: CitaMedicaService) {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
@@ -145,5 +147,21 @@ export class PacienteComponent implements OnInit {
     console.log("Se cerró el modal");
     this.accion = "agregar nuevo";
     this.form.reset();
+  }
+  //DoctorModal
+  ElegirDoctor(value: Doctor){
+    const citaMedica: any={
+      citaMedicaID: 0,
+      doctorID: value.doctorID,
+      pacienteID: this.pacienteSeleccionado.pacienteID,
+      estado: "en espera",
+      recetaID: null
+    };
+    this.citaMedicaService.addData(citaMedica)
+    .subscribe(()=>{
+      alert("Se ha agregado una cita Médica");
+    })
+    console.log(citaMedica);
+    console.log(value.doctorID);
   }
 }

@@ -236,13 +236,15 @@
                 <p>{{ doctores.especialidad }}</p>
               </div>
               <div class="col">
-                <button class="btn btn-primary h-50 w-50">Elegir</button>
+                <button class="btn btn-primary h-50 w-50" 
+                (click)="ElegirDoctor(doctores)"
+                data-bs-dismiss="modal"
+                >Elegir</button>
               </div>
             </div>
           </div>
         </div>
         }
-
         <div class="modal-footer">
           <button
             type="button"
@@ -251,7 +253,6 @@
           >
             Close
           </button>
-          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>
