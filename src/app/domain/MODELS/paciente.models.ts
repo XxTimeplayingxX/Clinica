@@ -8,5 +8,4 @@ export interface paciente {
     activo: boolean
     historialMedico: string
     signosVitales: any[]
-    citaMedicas: any[]
   }

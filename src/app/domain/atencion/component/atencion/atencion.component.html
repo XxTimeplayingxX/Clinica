@@ -9,11 +9,11 @@
       </tr>
     </thead>
     <tbody>
-      @for (item of pacientes; track $index) {
+      @for (item of CitaMedica; track $index) {
       <tr>
         <td>{{ $index + 1 }}</td>
-        <td>{{ item.cedula }}</td>
-        <td>{{ item.nombre }} {{ item.apellido }}</td>
+        <td>{{ item.paciente.cedula }}</td>
+        <td>{{ item.paciente.nombre }} {{ item.paciente.apellido }}</td>
         <td><div class="container">
           <button
             type="button"

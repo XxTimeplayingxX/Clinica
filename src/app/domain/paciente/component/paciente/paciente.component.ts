@@ -22,11 +22,13 @@ export class PacienteComponent implements OnInit {
   id: number | undefined;
   pacienteSeleccionado: any = null;
 
-  constructor(private fb: FormBuilder, 
-    private fbuilder: FormBuilder, 
-    private pacienteService:ClinicaService,
-    private doctorService:DoctorService, 
-    private citaMedicaService: CitaMedicaService) {
+  constructor(
+    private fb: FormBuilder,
+    private fbuilder: FormBuilder,
+    private pacienteService: ClinicaService,
+    private doctorService: DoctorService,
+    private citaMedicaService: CitaMedicaService
+  ) {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
@@ -46,19 +48,17 @@ export class PacienteComponent implements OnInit {
   doctor = <Doctor[]>[];
 
   //Métodos de la API
-  getData(){
-    this.pacienteService.getData().subscribe((data)=>{
+  getData() {
+    this.pacienteService.getData().subscribe((data) => {
       this.paciente = data;
       console.log(this.paciente);
-    })
+    });
   }
-  getDataDoctor(){
-    this.doctorService.getData().subscribe((data)=>{
+  getDataDoctor() {
+    this.doctorService.getData().subscribe((data) => {
       this.doctor = data;
-    })
+    });
   }
-
-
 
   // doctor = [
   //   {
@@ -74,7 +74,7 @@ export class PacienteComponent implements OnInit {
   //   }
   // ];
 
-  ObtenerObjeto(objetoSeleccionado: any){
+  ObtenerObjeto(objetoSeleccionado: any) {
     this.pacienteSeleccionado = objetoSeleccionado;
     console.log(this.pacienteSeleccionado);
   }
@@ -94,20 +94,20 @@ export class PacienteComponent implements OnInit {
 
     if (this.id == undefined) {
       //Agregamos un nuevo Paciente
-      this.pacienteService.addData(paciente)
-      .subscribe((newPaciente)=>{
-        console.log("Nuevo paciente agregado: ",newPaciente);
-        alert("Paciente agregado correctamente");
+      this.pacienteService.addData(paciente).subscribe((newPaciente) => {
+        console.log('Nuevo paciente agregado: ', newPaciente);
+        alert('Paciente agregado correctamente');
         this.getData();
-      })
+      });
       console.log(paciente);
       this.form.reset();
     } else {
-      this.pacienteService.updateData(this.pacienteSeleccionado.pacienteID, paciente)
-      .subscribe(()=>{
-        alert("Cambios aplicados: ");
-        this.getData();
-      })
+      this.pacienteService
+        .updateData(this.pacienteSeleccionado.pacienteID, paciente)
+        .subscribe(() => {
+          alert('Cambios aplicados: ');
+          this.getData();
+        });
       console.log(this.paciente);
       this.id = undefined;
       this.accion = 'agregar';
@@ -117,11 +117,10 @@ export class PacienteComponent implements OnInit {
 
   EliminarPaciente(index: paciente) {
     console.log(index.pacienteID);
-    this.pacienteService.deleteData(index.pacienteID)
-    .subscribe(()=>{
-      alert("Se ha eliminado un registro")
+    this.pacienteService.deleteData(index.pacienteID).subscribe(() => {
+      alert('Se ha eliminado un registro');
       this.getData();
-    })
+    });
     //this.pacientes.splice(index, 1);
   }
 
@@ -143,24 +142,29 @@ export class PacienteComponent implements OnInit {
     });
     console.log(pacientes);
   }
-  CloseModal(){
-    console.log("Se cerró el modal");
-    this.accion = "agregar nuevo";
+  CloseModal() {
+    console.log('Se cerró el modal');
+    this.accion = 'agregar nuevo';
     this.form.reset();
   }
   //DoctorModal
-  ElegirDoctor(value: Doctor){
-    const citaMedica: any={
+  ElegirDoctor(value: Doctor) {
+    const date = new Date();
+    const formattedDate = `${date.getFullYear()} ${(
+      '0' +
+      (date.getMonth() + 1)
+    ).slice(-2)} ${('0' + date.getDate()).slice(-2)}`;
+    const citaMedica: any = {
       citaMedicaID: 0,
       doctorID: value.doctorID,
       pacienteID: this.pacienteSeleccionado.pacienteID,
-      estado: "en espera",
-      recetaID: null
+      estado: 'En espera',
+      recetaID: null,
+      fecha: formattedDate
     };
-    this.citaMedicaService.addData(citaMedica)
-    .subscribe(()=>{
-      alert("Se ha agregado una cita Médica");
-    })
+    this.citaMedicaService.addData(citaMedica).subscribe(() => {
+      alert('Se ha agregado una cita Médica');
+    });
     console.log(citaMedica);
     console.log(value.doctorID);
   }

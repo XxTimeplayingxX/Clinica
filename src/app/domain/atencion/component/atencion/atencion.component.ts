@@ -2,6 +2,13 @@ import { Component, numberAttribute } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EventEmitter } from 'node:stream';
 import { PacienteRoutingModule } from '../../../paciente/paciente-routing.module';
+import { CitaMedica } from '../../../MODELS/citaMedica.model';
+import { CitaMedicaService } from '../../../services/cita-medica.service';
+import { RecetaService } from '../../../services/receta.service';
+import { Console, error, time } from 'node:console';
+import { DetalleRecetaService } from '../../../services/detalle-receta.service';
+import { NotificacionService } from '../../../services/notificacion.service';
+import { concatMap, from } from 'rxjs';
 
 @Component({
   selector: 'app-atencion',
@@ -10,6 +17,40 @@ import { PacienteRoutingModule } from '../../../paciente/paciente-routing.module
 })
 export class AtencionComponent {
   pacienteSeleccionado: any = null;
+  citaMedicaSeleccionada: any = null;
+  CitaMedica = <CitaMedica[]>[];
+
+  constructor(
+    private fb: FormBuilder,
+    private citaMedicaService: CitaMedicaService,
+    private recetaServide: RecetaService,
+    private detalleRecetaService: DetalleRecetaService,
+    private notificacionService: NotificacionService
+  ) {
+    this.form = this.fb.group({
+      medicamento: ['', Validators.required],
+      dosis: ['', Validators.required],
+      frecuencia: ['', Validators.required],
+      fechaInicio: ['', Validators.required],
+      duracion: ['', Validators.required],
+      instrucciones: ['', Validators.required],
+    });
+  }
+
+  ngOnInit(): void {
+    console.log('Se ejecuta el Init');
+    console.log(Date);
+    this.getData();
+  }
+
+  
+
+  getData() {
+    this.citaMedicaService.getData().subscribe((data) => {
+      this.CitaMedica = data;
+      console.log(data);
+    });
+  }
 
   pacientes = [
     {
@@ -70,8 +111,10 @@ export class AtencionComponent {
   ];
 
   ObtenerObjeto(index: number) {
-    this.pacienteSeleccionado = this.pacientes[index];
+    this.pacienteSeleccionado = this.CitaMedica[index].paciente;
+    this.citaMedicaSeleccionada = this.CitaMedica[index];
     console.log(this.pacienteSeleccionado);
+    console.log(this.citaMedicaSeleccionada);
   }
 
   //Modal
@@ -80,16 +123,6 @@ export class AtencionComponent {
   id: number | undefined;
   inicializador: number = 0;
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      medicamento: ['', Validators.required],
-      dosis: ['', Validators.required],
-      frecuencia: ['', Validators.required],
-      fechaInicio: ['', Validators.required],
-      duracion: ['', Validators.required],
-      instrucciones: ['', Validators.required],
-    });
-  }
   detalleReceta: any = [];
 
   GuardarCambios() {
@@ -105,6 +138,7 @@ export class AtencionComponent {
       apellido: this.pacienteSeleccionado.apellido,
       id: this.pacienteSeleccionado.pacienteID,
     };
+
     if (
       this.detalleReceta.length > 0 &&
       this.detalleReceta[0].id != detalleReceta.id
@@ -165,52 +199,112 @@ export class AtencionComponent {
 
   horasDespierto = [6, 12, 20];
   horasDespiertoDosVeces = [6, 20];
-  notificacione: any = []
+  notificacione: any = [];
+  receta: any = [];
 
   EnviarCambios(detalleReceta: any) {
-    console.log("Inicio del método");
-    console.log(detalleReceta);
-    console.log(detalleReceta.length);    
-    
-    for(let i = 0; i < detalleReceta.length; i++){
-      console.log("Estamos en el elemento "+i+" del arreglo");
-      console.log("Detalle Frecuencia: " + detalleReceta[i].frecuencia)
-      console.log("Notificaciones: "+24/detalleReceta[i].frecuencia)
-      let notificacionesPorDia = Math.floor(24/detalleReceta[i].frecuencia);
-      console.log("Notificaciones por día: "+notificacionesPorDia);
-      for(let dia = 0; dia < detalleReceta[i].duracion; dia++){
-        console.log("Estamos en el día: "+dia)
-        console.log("La duración del tratamiento es de: "+detalleReceta[i].duracion+" días");
-        for(let n = 0; n< notificacionesPorDia; n++){
-          let horaNotificacion: any;
-          if(notificacionesPorDia == 3){
-            horaNotificacion = this.horasDespierto[n % this.horasDespierto.length];
-          }else{
-            horaNotificacion = this.horasDespiertoDosVeces[n % this.horasDespiertoDosVeces.length];
-          }
-          console.log("Hora Notificación es: "+horaNotificacion);
-          console.log("Fecha de Inicio: "+detalleReceta[i].fechaInicio);
-          console.log(typeof(detalleReceta[i].fechaInicio));
-          let dstr: string = detalleReceta[i].fechaInicio;
-          let fechaDosis: Date = new Date(dstr+ 'T00:00:00');
-          console.log("Fecha dosis: "+fechaDosis);
-          fechaDosis.setDate(fechaDosis.getDate()+dia);
-          console.log(fechaDosis.setDate);
-          fechaDosis.setHours(horaNotificacion, 0, 0, 0);
-          const nuevaNotificacion: any= {
-            IdDetalleReceta: detalleReceta[i].id,
-            FechaDosis: fechaDosis,
-            Enviado: false,
-            fechaEnviado: null,
-            telefono: detalleReceta[i].telefono, 
-            mensaje: "Hola "+detalleReceta[i].nombre + ", es hora de tomar: "+detalleReceta[i].medicamento
-          }
+    console.log('Vamos a ir Creando la receta');
+    const receta: any = {
+      FechaEmision: new Date(),
+      Comentarios: detalleReceta[0].instrucciones,
+    };
 
-          console.log(nuevaNotificacion);
-          this.notificacione.push(nuevaNotificacion);
+    this.recetaServide.addData(receta).subscribe({
+      next: (newReceta) => {
+        console.log('Nueva receta agregada: ', newReceta);
+
+        for (let i = 0; i < detalleReceta.length; i++) {
+          const Detalle: any = {
+            Dosis: detalleReceta[i].dosis,
+            Frecuencia:
+              detalleReceta[i].frecuencia > 1
+                ? `Cada ${detalleReceta[i].frecuencia} horas`
+                : `Cada ${detalleReceta[i].frecuencia} hora`,
+            Duracion:
+              detalleReceta[i].duracion > 1
+                ? `${detalleReceta[i].duracion} días`
+                : `${detalleReceta[i].duracion} dia`,
+            Instrucciones: detalleReceta[i].instrucciones,
+            RecetaId: newReceta.recetaID,
+            FechaInicio: new Date(detalleReceta[i].fechaInicio),
+          };
+
+          console.log(Detalle);
+
+          this.detalleRecetaService.addData(Detalle).subscribe({
+            next: (newDetalleReceta) => {
+              console.log('Nueva Detalle Receta agregada: ', newDetalleReceta);
+
+              let notificacionesPorDia = Math.floor(
+                24 / detalleReceta[i].frecuencia
+              );
+              for (let dia = 0; dia < detalleReceta[i].duracion; dia++) {
+                for (let n = 0; n < notificacionesPorDia; n++) {
+                  let horaNotificacion: any;
+                  if (notificacionesPorDia == 3) {
+                    horaNotificacion =
+                      this.horasDespierto[n % this.horasDespierto.length];
+                  } else {
+                    horaNotificacion =
+                      this.horasDespiertoDosVeces[
+                        n % this.horasDespiertoDosVeces.length
+                      ];
+                  }
+                  let dstr: string = detalleReceta[i].fechaInicio;
+                  let fechaDosis: Date = new Date(dstr + 'T00:00:00');
+                  fechaDosis.setDate(fechaDosis.getDate() + dia);
+                  fechaDosis.setHours(horaNotificacion, 0, 0, 0);
+                  console.log('Hora: '+ fechaDosis);
+                  const nuevaNotificacion: any = {
+                    detalleRecetaID: newDetalleReceta.detalleRecetaID,
+                    FechaDosis: new Date(fechaDosis).toISOString(),
+                    enviado: false,
+                    fechaEnviado: null,
+                    telefono: detalleReceta[i].telefono,
+                    mensaje:
+                      'Hola ' +
+                      detalleReceta[i].nombre +
+                      ', es hora de tomar: ' +
+                      detalleReceta[i].medicamento,
+                  };
+                  this.notificacionService.addData(nuevaNotificacion).subscribe({
+                    next: (newNotification)=>{
+                      console.log('Nueva Notificación agregada: ', newNotification);                      
+                    },
+                    error: (error)=>{
+                      console.log('Error', error)
+                    }
+                  })
+                }
+              }
+            },
+            error: (error) => {
+              console.log('Error', error);
+            },
+          });               
         }
-      }
-    }
-    console.log(this.notificacione.length);
+        const citaMedicaUpdate = {
+          citaMedicaID: this.citaMedicaSeleccionada.citaMedicaID,
+          doctorID: this.citaMedicaSeleccionada.doctorID,
+          pacienteID: this.citaMedicaSeleccionada.pacienteID,
+          fecha: new Date(this.citaMedicaSeleccionada.fecha),
+          estado: 'Atendido',
+          recetaID: newReceta.recetaID
+        };
+        this.citaMedicaService.updateData(citaMedicaUpdate.citaMedicaID, citaMedicaUpdate).subscribe({
+          next: (newCitaMedica)=>{
+            console.log('Cita Médica actualizada');
+          },
+          error: (error)=>{
+            console.log(error);
+          }
+        })
+      },
+      error: (error) => {
+        console.log('Error al agregar la receta: ', error);
+      },
+    });
+    console.log(receta);
+    
   }
 }

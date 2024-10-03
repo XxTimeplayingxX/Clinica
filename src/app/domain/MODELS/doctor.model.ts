@@ -8,5 +8,4 @@ export interface Doctor {
     activo: boolean
     especialidad: string
     cargo: string
-    citaMedicas: any[]
   }
