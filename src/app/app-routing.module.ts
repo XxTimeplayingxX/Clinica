@@ -20,6 +20,15 @@ const routes: Routes = [
         loadChildren:()=>import('./domain/atencion/atencion.module').then(l=>l.AtencionModule)
       }
     ]
+  },
+  {
+    path: '',
+    children:[
+      {
+        path: 'login',
+        loadChildren:()=> import('./domain/login/login.module').then(l=>l.LoginModule)
+      }
+    ]
   }
 ];
 

@@ -1,0 +1,17 @@
+<div class="form-container row">    
+    <form [formGroup]="form" class="col" >
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Usuario</label>
+        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" formControlName="usuario">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" formControlName="contrasena">
+      </div>
+      <button type="button" class="btn btn-primary" (click)="Ingresar()" >Ingresar</button>
+    </form>
+
+  <div class="col img-container">
+    <img src="https://img.freepik.com/vector-premium/joven-medico-levanta-pulgar_961875-463072.jpg?semt=ais_hybrid" alt="">
+  </div>
+  </div>

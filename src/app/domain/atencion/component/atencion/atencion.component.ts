@@ -1,14 +1,11 @@
 import { Component, numberAttribute } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EventEmitter } from 'node:stream';
-import { PacienteRoutingModule } from '../../../paciente/paciente-routing.module';
 import { CitaMedica } from '../../../MODELS/citaMedica.model';
 import { CitaMedicaService } from '../../../services/cita-medica.service';
 import { RecetaService } from '../../../services/receta.service';
-import { Console, error, time } from 'node:console';
 import { DetalleRecetaService } from '../../../services/detalle-receta.service';
 import { NotificacionService } from '../../../services/notificacion.service';
-import { concatMap, from } from 'rxjs';
+import { Router, RouterEvent } from '@angular/router';
 
 @Component({
   selector: 'app-atencion',
@@ -25,7 +22,8 @@ export class AtencionComponent {
     private citaMedicaService: CitaMedicaService,
     private recetaServide: RecetaService,
     private detalleRecetaService: DetalleRecetaService,
-    private notificacionService: NotificacionService
+    private notificacionService: NotificacionService,
+    private routerTo:Router
   ) {
     this.form = this.fb.group({
       medicamento: ['', Validators.required],
@@ -294,6 +292,7 @@ export class AtencionComponent {
         this.citaMedicaService.updateData(citaMedicaUpdate.citaMedicaID, citaMedicaUpdate).subscribe({
           next: (newCitaMedica)=>{
             console.log('Cita Médica actualizada');
+            this.getData();
           },
           error: (error)=>{
             console.log(error);
@@ -306,5 +305,11 @@ export class AtencionComponent {
     });
     console.log(receta);
     
+  }
+  EnviarAListaPaciente(){
+    this.routerTo.navigateByUrl('/paciente');
+  }
+  EnviarAAtencion(){
+    this.routerTo.navigateByUrl('/lista-paciente');
   }
 }

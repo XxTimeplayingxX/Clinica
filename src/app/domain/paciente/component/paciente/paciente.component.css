@@ -23,3 +23,36 @@ i{
     justify-content: center;
     align-items: center;
 }
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logo img{
+    width: 100px;
+    height: 100px;
+}
+.sidebar{
+    display: flex;
+    flex-direction: column;
+}
+.sidebar .item{
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(13, 110, 252);
+    margin-bottom: 10px;
+    justify-content: center;
+    padding: 10px;
+    cursor: pointer;
+}
+.sidebar .item:hover{
+    background-color: rgb(0, 0, 0);
+    transition: 0.4s;
+}
+.sidebar .item .icon{
+    margin-right: 10px;
+    color: white;
+}
+.sidebar .item .icon-name{
+    color: white;
+}

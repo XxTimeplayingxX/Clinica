@@ -10,6 +10,7 @@ import { ClinicaService } from '../../../services/clinica.service';
 import { DoctorService } from '../../../services/doctor.service';
 import { Doctor } from '../../../MODELS/doctor.model';
 import { CitaMedicaService } from '../../../services/cita-medica.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-paciente',
@@ -27,8 +28,9 @@ export class PacienteComponent implements OnInit {
     private fbuilder: FormBuilder,
     private pacienteService: ClinicaService,
     private doctorService: DoctorService,
-    private citaMedicaService: CitaMedicaService
-  ) {
+    private citaMedicaService: CitaMedicaService,
+    private routerTo: Router
+    ) {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
@@ -167,5 +169,12 @@ export class PacienteComponent implements OnInit {
     });
     console.log(citaMedica);
     console.log(value.doctorID);
+  }
+
+  EnviarAListaPaciente(){
+    this.routerTo.navigateByUrl('/paciente');
+  }
+  EnviarAAtencion(){
+    this.routerTo.navigateByUrl('/lista-paciente');
   }
 }
