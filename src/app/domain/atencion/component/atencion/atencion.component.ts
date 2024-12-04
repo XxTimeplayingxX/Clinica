@@ -16,6 +16,7 @@ export class AtencionComponent {
   pacienteSeleccionado: any = null;
   citaMedicaSeleccionada: any = null;
   CitaMedica = <CitaMedica[]>[];
+  horaActual: any = null
 
   constructor(
     private fb: FormBuilder,
@@ -23,7 +24,7 @@ export class AtencionComponent {
     private recetaServide: RecetaService,
     private detalleRecetaService: DetalleRecetaService,
     private notificacionService: NotificacionService,
-    private routerTo:Router
+    private routerTo: Router
   ) {
     this.form = this.fb.group({
       medicamento: ['', Validators.required],
@@ -32,6 +33,7 @@ export class AtencionComponent {
       fechaInicio: ['', Validators.required],
       duracion: ['', Validators.required],
       instrucciones: ['', Validators.required],
+      duracionHoras: ['', Validators.required]
     });
   }
 
@@ -41,72 +43,12 @@ export class AtencionComponent {
     this.getData();
   }
 
-  
-
   getData() {
     this.citaMedicaService.getData().subscribe((data) => {
       this.CitaMedica = data;
       console.log(data);
     });
   }
-
-  pacientes = [
-    {
-      pacienteID: 1,
-      nombre: 'Juan',
-      apellido: 'Pérez',
-      cedula: '0912345678',
-      telefono: '0991234567',
-      correo: 'juan.perez@example.com',
-      genero: 'Masculino',
-      activo: true,
-      historialMedico: '0912345678',
-    },
-    {
-      pacienteID: 2,
-      nombre: 'María',
-      apellido: 'González',
-      cedula: '0923456789',
-      telefono: '0992345678',
-      correo: 'maria.gonzalez@example.com',
-      genero: 'Femenino',
-      activo: false,
-      historialMedico: '0923456789',
-    },
-    {
-      pacienteID: 3,
-      nombre: 'Carlos',
-      apellido: 'Ramírez',
-      cedula: '0934567890',
-      telefono: '0993456789',
-      correo: 'carlos.ramirez@example.com',
-      genero: 'Masculino',
-      activo: true,
-      historialMedico: '0934567890',
-    },
-    {
-      pacienteID: 4,
-      nombre: 'Ana',
-      apellido: 'López',
-      cedula: '0945678901',
-      telefono: '0994567890',
-      correo: 'ana.lopez@example.com',
-      genero: 'Femenino',
-      activo: true,
-      historialMedico: '0945678901',
-    },
-    {
-      pacienteID: 5,
-      nombre: 'Luis',
-      apellido: 'Martínez',
-      cedula: '0956789012',
-      telefono: '0995678901',
-      correo: 'luis.martinez@example.com',
-      genero: 'Masculino',
-      activo: false,
-      historialMedico: '0956789012',
-    },
-  ];
 
   ObtenerObjeto(index: number) {
     this.pacienteSeleccionado = this.CitaMedica[index].paciente;
@@ -135,9 +77,30 @@ export class AtencionComponent {
       nombre: this.pacienteSeleccionado.nombre,
       apellido: this.pacienteSeleccionado.apellido,
       id: this.pacienteSeleccionado.pacienteID,
+      duracionHoras: this.form.get('duracionHoras')?.value
     };
 
-    if (
+    console.log(this.form.get('fechaInicio')?.value);
+    console.log(new Date());
+    const fechaSeleccionada = new Date(this.form.get('fechaInicio')?.value)
+    fechaSeleccionada.setDate(fechaSeleccionada.getDate() + 1);
+    console.log(fechaSeleccionada);
+    const fechaActual = new Date();
+
+    const esHoy =
+    fechaSeleccionada.getFullYear() === fechaActual.getFullYear() &&
+    fechaSeleccionada.getMonth() === fechaActual.getMonth() &&
+    fechaSeleccionada.getDate() === fechaActual.getDate();
+
+
+
+    if (esHoy && fechaSeleccionada <= fechaActual) {
+      alert(
+        'Error, no se puede escoger esta hora. Debe ser al menos una hora después de la cita médica.'
+      );
+      return; // No continuar si hay error
+    }
+    else if (
       this.detalleReceta.length > 0 &&
       this.detalleReceta[0].id != detalleReceta.id
     ) {
@@ -158,7 +121,6 @@ export class AtencionComponent {
       //Agregamos una nuevo paciente
       this.detalleReceta.push(detalleReceta);
       this.form.reset();
-      console.log(this.detalleReceta);
     } else {
       //Editamos paciente
       this.detalleReceta[this.id] = detalleReceta;
@@ -195,8 +157,8 @@ export class AtencionComponent {
     this.accion = 'Agregar';
   }
 
-  horasDespierto = [6, 12, 20];
-  horasDespiertoDosVeces = [6, 20];
+  horasDespierto = ["06:00", "14:00", "20:00"];
+  horasDespiertoDosVeces = ["06:00", "20:00"];
   notificacione: any = [];
   receta: any = [];
 
@@ -207,6 +169,7 @@ export class AtencionComponent {
       Comentarios: detalleReceta[0].instrucciones,
     };
 
+    console.log('esta es el detalleReceta que nos vino: ',detalleReceta)
     this.recetaServide.addData(receta).subscribe({
       next: (newReceta) => {
         console.log('Nueva receta agregada: ', newReceta);
@@ -238,21 +201,28 @@ export class AtencionComponent {
               );
               for (let dia = 0; dia < detalleReceta[i].duracion; dia++) {
                 for (let n = 0; n < notificacionesPorDia; n++) {
+                  debugger;
                   let horaNotificacion: any;
                   if (notificacionesPorDia == 3) {
                     horaNotificacion =
                       this.horasDespierto[n % this.horasDespierto.length];
-                  } else {
+                  } 
+                  else if(notificacionesPorDia == 2) {
                     horaNotificacion =
                       this.horasDespiertoDosVeces[
                         n % this.horasDespiertoDosVeces.length
                       ];
                   }
+                  else{
+                    horaNotificacion = detalleReceta[i].duracionHoras; 
+                    console.log(horaNotificacion);
+                  }
+                  let [horas, minutos] = horaNotificacion.split(":").map(Number);
                   let dstr: string = detalleReceta[i].fechaInicio;
                   let fechaDosis: Date = new Date(dstr + 'T00:00:00');
                   fechaDosis.setDate(fechaDosis.getDate() + dia);
-                  fechaDosis.setHours(horaNotificacion, 0, 0, 0);
-                  console.log('Hora: '+ fechaDosis);
+                  fechaDosis.setHours(horas, minutos, 0, 0);
+                  console.log('Hora: ' + fechaDosis);
                   const nuevaNotificacion: any = {
                     detalleRecetaID: newDetalleReceta.detalleRecetaID,
                     FechaDosis: new Date(fechaDosis).toISOString(),
@@ -265,21 +235,26 @@ export class AtencionComponent {
                       ', es hora de tomar: ' +
                       detalleReceta[i].medicamento,
                   };
-                  this.notificacionService.addData(nuevaNotificacion).subscribe({
-                    next: (newNotification)=>{
-                      console.log('Nueva Notificación agregada: ', newNotification);                      
-                    },
-                    error: (error)=>{
-                      console.log('Error', error)
-                    }
-                  })
+                  this.notificacionService
+                    .addData(nuevaNotificacion)
+                    .subscribe({
+                      next: (newNotification) => {
+                        console.log(
+                          'Nueva Notificación agregada: ',
+                          newNotification
+                        );
+                      },
+                      error: (error) => {
+                        console.log('Error', error);
+                      },
+                    });
                 }
               }
             },
             error: (error) => {
               console.log('Error', error);
             },
-          });               
+          });
         }
         const citaMedicaUpdate = {
           citaMedicaID: this.citaMedicaSeleccionada.citaMedicaID,
@@ -287,29 +262,31 @@ export class AtencionComponent {
           pacienteID: this.citaMedicaSeleccionada.pacienteID,
           fecha: new Date(this.citaMedicaSeleccionada.fecha),
           estado: 'Atendido',
-          recetaID: newReceta.recetaID
+          recetaID: newReceta.recetaID,
         };
-        this.citaMedicaService.updateData(citaMedicaUpdate.citaMedicaID, citaMedicaUpdate).subscribe({
-          next: (newCitaMedica)=>{
-            console.log('Cita Médica actualizada');
-            this.getData();
-          },
-          error: (error)=>{
-            console.log(error);
-          }
-        })
+        this.citaMedicaService
+          .updateData(citaMedicaUpdate.citaMedicaID, citaMedicaUpdate)
+          .subscribe({
+            next: (newCitaMedica) => {
+              console.log('Cita Médica actualizada');
+              this.getData();
+            },
+            error: (error) => {
+              console.log(error);
+            },
+          });
       },
       error: (error) => {
         console.log('Error al agregar la receta: ', error);
       },
     });
     console.log(receta);
-    
   }
-  EnviarAListaPaciente(){
+  EnviarAListaPaciente() {
     this.routerTo.navigateByUrl('/paciente');
   }
-  EnviarAAtencion(){
+  EnviarAAtencion() {
     this.routerTo.navigateByUrl('/lista-paciente');
+    this.horaActual = new Date();
   }
 }
